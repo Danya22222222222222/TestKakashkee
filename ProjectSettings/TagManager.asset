@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - MovableKey
+  - PuzzleObject
+  - RedOrb
+  - BlueOrb
+  - GreenOrb
   layers:
   - Default
   - TransparentFX
