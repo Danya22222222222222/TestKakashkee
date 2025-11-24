@@ -1,21 +1,21 @@
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.SceneManagement; // Обязательно для работы со сценами
 
-public class Create2DMaterialFix
+public class MainMenu : MonoBehaviour
 {
-    // Ця функція додає нову опцію у меню Assets/Create
-    [MenuItem("Assets/Create/Physics Material 2D (FIXED)")]
-    public static void CreatePhysicsMaterial2DFix()
+    // Метод для кнопки "Играть"
+    public void PlayGame()
     {
-        // Створюємо новий екземпляр PhysicsMaterial2D
-        PhysicsMaterial2D newMat = new PhysicsMaterial2D();
+        
+        // Загружает следующую сцену в списке Build Settings
+        // Например, если Меню - это индекс 0, то Игра будет индекс 1
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
 
-        // Створюємо .physicMaterial2D файл в папці Assets
-        string path = AssetDatabase.GenerateUniqueAssetPath("Assets/New Physics Material 2D.physicMaterial2D");
-        AssetDatabase.CreateAsset(newMat, path);
-        AssetDatabase.SaveAssets();
-
-        // Виділяємо новий асет у вікні Project
-        Selection.activeObject = newMat;
+    // Метод для кнопки "Выход"
+    public void QuitGame()
+    {
+        Debug.Log("Игра закрылась!"); // Чтобы видеть проверку в редакторе Unity
+        Application.Quit();
     }
 }

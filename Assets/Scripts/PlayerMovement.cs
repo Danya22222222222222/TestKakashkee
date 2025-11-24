@@ -4,17 +4,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 5f;               // Максимальна горизонтальна швидкість
-    public float smoothTimeGround = 0.05f;     // Час згладжування на землі (менше = швидше реагує)
-    public float smoothTimeAir = 0.15f;        // Час згладжування в повітрі (більше = інерція)
+    public float moveSpeed = 5f;
+    public float smoothTimeGround = 0.05f;
+    public float smoothTimeAir = 0.15f;
 
     [Header("Jump")]
-    public float jumpForce = 7f;               // Сила стрибка
+    public float jumpForce = 7f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundRadius = 0.15f;
-    public LayerMask groundLayer;
+    public LayerMask groundLayer; // якщо 0 в інспекторі — буде замінено на "всі шари" у Awake
 
     [Header("Debug")]
     public bool debugLogs = false;
@@ -28,30 +28,37 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        // Спробувати знайти Collider2D на цьому об'єкті або в дочірніх
         col = GetComponent<Collider2D>();
+        if (col == null)
+            col = GetComponentInChildren<Collider2D>();
 
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
+        // Якщо groundCheck не заданий — створити простий порожній об'єкт під персонажем
         if (groundCheck == null)
         {
             GameObject go = new GameObject("GroundCheck");
-            go.transform.parent = transform;
+            go.transform.SetParent(transform);
             go.transform.localPosition = new Vector3(0f, -0.6f, 0f);
             groundCheck = go.transform;
         }
 
+        // Якщо у інспекторі поставили 0 (нічого) — використовуємо маску "всі шари"
         if (groundLayer == 0)
-            groundLayer = ~0; // всі шари за замовчуванням
+            groundLayer = ~0;
     }
 
     void Update()
     {
-        // Підтримуються клавіші A/D або стрілки для руху по горизонталі
-        inputX = Input.GetAxis("Horizontal"); // від -1 до 1
+        // Отримуємо горизонтальний ввід (A/D, стрілки або інші, налаштовані у Input Manager)
+        inputX = Input.GetAxis("Horizontal");
 
-        // Стрибок — W або стрілка вгору
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && IsGrounded())
+        // Використовуємо Input Manager кнопку "Jump" (за замовчуванням пробіл) або можна налаштувати на W/стрілку вгору
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
+            // Встановлюємо вертикальну швидкість для однозначного стрибка
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             if (debugLogs) Debug.Log("PlayerMovement: Jump");
         }
@@ -73,19 +80,26 @@ public class PlayerMovement : MonoBehaviour
     {
         if (groundCheck == null) return false;
 
-        // Use OverlapCircleAll and ignore player's own collider to avoid detecting self
+        // Захищаємося, якщо колайдера немає (не помилятися при старті)
+        if (col == null)
+        {
+            col = GetComponent<Collider2D>();
+            if (col == null)
+                col = GetComponentInChildren<Collider2D>();
+        }
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(groundCheck.position, groundRadius, groundLayer);
         foreach (var hit in hits)
         {
             if (hit == null) continue;
-            if (hit == col) continue; // ignore own collider
-            if (hit.isTrigger) continue; // ignore triggers
+            if (hit == col) continue;      // ігнорувати власний колайдер
+            if (hit.isTrigger) continue;  // ігнорувати тригери
             return true;
         }
         return false;
     }
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         if (groundCheck != null)
         {

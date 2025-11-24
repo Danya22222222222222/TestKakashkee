@@ -23,26 +23,9 @@ public class Door : MonoBehaviour
         // Найпростіше: вимикаємо колайдер та запускаємо підняття/зникнення
         if (doorCollider != null) doorCollider.enabled = false;
 
-        // Якщо хочеш просто зникнути:
-        if (doorSprite != null)
-            StartCoroutine(FadeOutOrMove());
+      
         else
             gameObject.SetActive(false);
     }
 
-    System.Collections.IEnumerator FadeOutOrMove()
-    {
-        // приклад: підняти вниз->вгору плавно
-        Vector3 start = transform.position;
-        Vector3 target = start + new Vector3(0, openMoveY, 0);
-        float t = 0;
-        while (t < openTime)
-        {
-            t += Time.deltaTime;
-            transform.position = Vector3.Lerp(start, target, t / openTime);
-            yield return null;
-        }
-        // після підняття можна і зовсім сховати спрайт
-        if (doorSprite != null) doorSprite.enabled = false;
-    }
 }
