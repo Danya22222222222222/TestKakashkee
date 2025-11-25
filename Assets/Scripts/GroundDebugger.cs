@@ -13,11 +13,11 @@ public class GroundDebugger : MonoBehaviour
 
         if (collider != null)
         {
-            Debug.Log($"<color=green>ÁÀ×Ó ÇÅÌËŞ: {collider.gameObject.name} (Layer: {LayerMask.LayerToName(collider.gameObject.layer)})</color>");
+            //Debug.Log($"<color=green>ÁÀ×Ó ÇÅÌËŞ: {collider.gameObject.name} (Layer: {LayerMask.LayerToName(collider.gameObject.layer)})</color>");
         }
         else
         {
-            Debug.Log("<color=red>Ó ÏÎÂ²ÒĞ² (Í³÷îãî íå òîğêàşñü)</color>");
+            //Debug.Log("<color=red>Ó ÏÎÂ²ÒĞ² (Í³÷îãî íå òîğêàşñü)</color>");
         }
     }
 

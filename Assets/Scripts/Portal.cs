@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class Portal : MonoBehaviour
             // Викликаємо метод завантаження наступного рівня
             if (levelLoader != null)
             {
-                levelLoader.LoadNextLevel();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
             }
         }
     }

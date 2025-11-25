@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/TraineMap.unity
-    guid: e84811d9bfec1ab49922cde6671fcf9b
+    path: Assets/Scenes/New Scene.unity
+    guid: b38a40acb42ff1d4abeedcf140df321b
+  - enabled: 1
+    path: Assets/Scenes/LVL2.unity
+    guid: 724a8cce48c7d854580ed43955dfc016
   m_configObjects: {}
